@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOCUSBOX — 没頭できる場所が、すぐそこにある。</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #050810;
+      --bg-secondary: #0a0f1e;
+      --bg-card: #0d1428;
+      --neon: #00c8ff;
+      --neon-dim: rgba(0, 200, 255, 0.15);
+      --neon-glow: rgba(0, 200, 255, 0.4);
+      --text-primary: #e8f0fe;
+      --text-muted: #6b7a99;
+      --border: rgba(0, 200, 255, 0.2);
+      --navy: #0b1535;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ========== NAV ========== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(5, 8, 16, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--neon);
+      text-shadow: 0 0 20px var(--neon-glow);
+      text-decoration: none;
+    }
+    .nav-cta {
+      padding: 0.5rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--neon);
+      color: var(--neon);
+      border-radius: 4px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      background: var(--neon-dim);
+      box-shadow: 0 0 16px var(--neon-glow);
+    }
+
+    /* ========== HERO ========== */
+    #hero {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 背景画像レイヤー */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/01_coworking_space.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.35) saturate(0.7);
+      z-index: 0;
+    }
+
+    /* グリッドオーバーレイ */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
+      z-index: 1;
+    }
+
+    /* 底部フェードアウト */
+    .hero-fade-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 180px;
+      background: linear-gradient(to bottom, transparent, var(--bg-primary));
+      z-index: 2;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 30%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(0, 200, 255, 0.14) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Heroのテキストは全てz-index:3以上 */
+    #hero > *:not(.hero-bg):not(.hero-grid):not(.hero-glow):not(.hero-fade-bottom) {
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 1.5rem;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 2rem; height: 1px;
+      background: var(--neon);
+      vertical-align: middle;
+      margin: 0 0.8rem;
+      opacity: 0.6;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+    h1 .accent {
+      color: var(--neon);
+      text-shadow: 0 0 40px var(--neon-glow), 0 0 80px rgba(0,200,255,0.2);
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--neon);
+      color: #050810;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 30px var(--neon-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px var(--neon-glow), 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: rgba(5,8,16,0.5);
+      backdrop-filter: blur(8px);
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 6px var(--neon);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ========== SECTION COMMON ========== */
+    section { padding: 5rem 1.5rem; }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 520px;
+      margin-bottom: 3rem;
+    }
+
+    /* ========== FEATURES（ジグザグ） ========== */
+    #features {
+      background: var(--bg-secondary);
+    }
+
+    .zigzag {
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .zigzag-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    /* 偶数行：画像を右に */
+    .zigzag-row.reverse {
+      direction: rtl;
+    }
+    .zigzag-row.reverse > * {
+      direction: ltr;
+    }
+
+    .zigzag-img {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 32px rgba(0,200,255,0.12);
+    }
+
+    /* 16:9 画像 */
+    .zigzag-img.ratio-16-9::before {
+      content: '';
+      display: block;
+      padding-top: 56.25%;
+    }
+
+    /* 3:4 画像 */
+    .zigzag-img.ratio-3-4::before {
+      content: '';
+      display: block;
+      padding-top: 133.33%;
+    }
+
+    .zigzag-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .zigzag-img:hover img {
+      transform: scale(1.04);
+    }
+
+    /* ネオン縁取りアクセント */
+    .zigzag-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      box-shadow: inset 0 0 0 1px var(--border);
+      pointer-events: none;
+      transition: box-shadow 0.3s;
+    }
+    .zigzag-img:hover::after {
+      box-shadow: inset 0 0 0 1px var(--neon), 0 0 24px rgba(0,200,255,0.2);
+    }
+
+    .zigzag-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .zigzag-tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--neon);
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--neon);
+      width: fit-content;
+    }
+
+    .zigzag-title {
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    .zigzag-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    /* モバイル：縦積み */
+    @media (max-width: 720px) {
+      .zigzag-row,
+      .zigzag-row.reverse {
+        grid-template-columns: 1fr;
+        direction: ltr;
+        gap: 1.5rem;
+      }
+      /* 3:4画像はモバイルで縦横比を抑制 */
+      .zigzag-img.ratio-3-4::before {
+        padding-top: 66.66%;
+      }
+    }
+
+    /* ========== FOCUS ENVIRONMENT ========== */
+    #focus-env {
+      background: var(--bg-primary);
+      padding: 5rem 1.5rem;
+    }
+
+    .focus-env-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .focus-env-visual {
+      position: relative;
+    }
+
+    .focus-env-img {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 48px rgba(0,200,255,0.15);
+      position: relative;
+    }
+    .focus-env-img::before {
+      content: '';
+      display: block;
+      padding-top: 56.25%;
+    }
+    .focus-env-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* タイマーオーバーレイバッジ */
+    .timer-badge {
+      position: absolute;
+      bottom: 1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(5,8,16,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--neon);
+      border-radius: 8px;
+      padding: 0.6rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      white-space: nowrap;
+      box-shadow: 0 0 20px rgba(0,200,255,0.2);
+    }
+    .timer-badge-time {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--neon);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 12px var(--neon-glow);
+    }
+    .timer-badge-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .timer-badge-label strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 0.8rem;
+    }
+
+    .focus-env-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .pomodoro-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .pomodoro-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+    .pomodoro-step:hover {
+      border-color: var(--neon);
+    }
+    .pomo-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.35rem;
+    }
+    .pomo-dot.work  { background: var(--neon); box-shadow: 0 0 8px var(--neon); }
+    .pomo-dot.break { background: #7b5ea7; box-shadow: 0 0 8px #7b5ea7; }
+    .pomo-dot.long  { background: #2dd4bf; box-shadow: 0 0 8px #2dd4bf; }
+
+    .pomo-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 900;
+      margin-bottom: 0.15rem;
+    }
+    .pomo-text span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 720px) {
+      .focus-env-inner { grid-template-columns: 1fr; }
+    }
+
+    /* ========== PRICING ========== */
+    #pricing {
+      background: var(--bg-secondary);
+    }
+
+    .pricing-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .pricing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--neon);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0, 200, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    }
+
+    .pricing-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--neon);
+      color: #050810;
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .pricing-plan {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .pricing-price {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--neon);
+      text-shadow: 0 0 30px var(--neon-glow);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .pricing-unit {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+    .pricing-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 1.25rem 0 2rem;
+    }
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .check {
+      color: var(--neon);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .pricing-extra {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* 右側のブース画像コラム */
+    .pricing-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .pricing-img-main {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 32px rgba(0,200,255,0.12);
+      position: relative;
+    }
+    .pricing-img-main::before {
+      content: '';
+      display: block;
+      padding-top: 133.33%; /* 3:4 */
+    }
+    .pricing-img-main img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .pricing-img-caption {
+      padding: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .pricing-img-caption strong {
+      color: var(--neon);
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    @media (max-width: 720px) {
+      .pricing-layout { grid-template-columns: 1fr; }
+      .pricing-visual { order: -1; }
+      .pricing-img-main::before { padding-top: 66.66%; }
+    }
+
+    /* ========== HOW TO USE ========== */
+    #howto {
+      background: var(--bg-primary);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 2.5rem;
+      left: calc(16.66% + 1.5rem);
+      right: calc(16.66% + 1.5rem);
+      height: 1px;
+      background: var(--neon);
+      opacity: 0.25;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+    }
+    .step-num {
+      width: 5rem; height: 5rem;
+      border-radius: 50%;
+      border: 2px solid var(--neon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--neon);
+      background: var(--bg-primary);
+      box-shadow: 0 0 20px rgba(0,200,255,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .step-title {
+      font-size: 1rem;
+      font-weight: 900;
+    }
+    .step-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      max-width: 240px;
+    }
+
+    /* Step3の画像 */
+    .step-img {
+      width: 100%;
+      max-width: 200px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 20px rgba(0,200,255,0.1);
+      position: relative;
+    }
+    .step-img::before {
+      content: '';
+      display: block;
+      padding-top: 133.33%; /* 3:4 */
+    }
+    .step-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 720px) {
+      .steps {
+        grid-template-columns: 1fr;
+      }
+      .steps::before { display: none; }
+      .step-img { max-width: 100%; }
+      .step-img::before { padding-top: 56%; }
+    }
+
+    /* ========== CTA ========== */
+    #cta {
+      background: var(--bg-secondary);
+      text-align: center;
+      padding: 6rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,200,255,0.07), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .cta-sub {
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      font-size: 0.95rem;
+    }
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-secondary {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+    }
+
+    .store-badges {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .store-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .store-badge:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+    }
+    .store-badge-icon { font-size: 1.25rem; }
+    .store-badge-text strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ========== FADE-IN ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">FOCUSBOX</a>
+    <a href="#cta" class="nav-cta">今すぐ予約</a>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-fade-bottom"></div>
+
+    <p class="hero-eyebrow fade-in">個室コワーキングブース</p>
+
+    <h1 class="fade-in fade-in-delay-1">
+      没頭できる場所が、<br><span class="accent">すぐそこにある。</span>
+    </h1>
+
+    <p class="hero-sub fade-in fade-in-delay-2">
+      深夜でも、試験前でも。<br>
+      アプリで空きを確認して、今すぐ入室。あとは集中するだけ。
+    </p>
+
+    <a href="#cta" class="btn-primary fade-in fade-in-delay-3">今すぐ予約する</a>
+
+    <div class="hero-badge fade-in fade-in-delay-4">
+      <span class="badge-dot"></span>
+      リアルタイム空き状況確認可能
+    </div>
+  </section>
+
+  <!-- ===================== FEATURES（ジグザグ） ===================== -->
+  <section id="features">
+    <div class="container">
+      <p class="section-label fade-in">Features</p>
+      <h2 class="section-title fade-in">集中のために、<br>全部そろってる。</h2>
+      <p class="section-desc fade-in">テスト前夜も、資格勉強も。ブースに入れば、あとは自分だけの世界。</p>
+
+      <div class="zigzag">
+
+        <!-- 01: Bluetoothスピーカー（画像左） -->
+        <div class="zigzag-row fade-in">
+          <div class="zigzag-img ratio-3-4">
+            <img src="images/04_headphone_work.jpg" alt="ヘッドホンで集中作業する人" loading="lazy">
+          </div>
+          <div class="zigzag-text">
+            <span class="zigzag-tag">Sound</span>
+            <h3 class="zigzag-title">Bluetoothスピーカー完備</h3>
+            <p class="zigzag-desc">
+              スマホをペアリングするだけ。自分のプレイリストで、最高の集中環境をつくれる。
+              ノイズキャンセリングヘッドホンとの組み合わせで、外界を完全シャットアウト。
+            </p>
+          </div>
+        </div>
+
+        <!-- 02: エナジードリンク（画像右） -->
+        <div class="zigzag-row reverse fade-in">
+          <div class="zigzag-img ratio-3-4">
+            <img src="images/02_energy_drink.jpg" alt="モンスターエナジードリンク" loading="lazy">
+          </div>
+          <div class="zigzag-text">
+            <span class="zigzag-tag">Energy</span>
+            <h3 class="zigzag-title">モンスターエナジー<br>自販機、常設。</h3>
+            <p class="zigzag-desc">
+              ブース入口の横に24時間稼働の自販機。深夜3時の追い込みも、眠気を吹き飛ばして乗り越えられる。
+              集中力が切れそうになったら、すぐに補給できる。
+            </p>
+          </div>
+        </div>
+
+        <!-- 03: 完全防音（画像左） -->
+        <div class="zigzag-row fade-in">
+          <div class="zigzag-img ratio-3-4">
+            <img src="images/05_soundproof_booth.jpg" alt="防音個室ブース内部" loading="lazy">
+          </div>
+          <div class="zigzag-text">
+            <span class="zigzag-tag">Isolation</span>
+            <h3 class="zigzag-title">完全防音設計の<br>個室ブース</h3>
+            <p class="zigzag-desc">
+              吸音材を壁面に張り巡らせた完全個室。外の雑音はゼロ。自分の声もブースの外に漏れない。
+              ネオンアンビエントライトが「仕事モード」への切り替えを加速する。
+            </p>
+          </div>
+        </div>
+
+        <!-- 04: 充電設備（画像右） -->
+        <div class="zigzag-row reverse fade-in">
+          <div class="zigzag-img ratio-16-9">
+            <img src="images/06_charging_desk.jpg" alt="USBポートと電源が光るデスク" loading="lazy">
+          </div>
+          <div class="zigzag-text">
+            <span class="zigzag-tag">Power</span>
+            <h3 class="zigzag-title">全席 無料充電・<br>USBポート完備</h3>
+            <p class="zigzag-desc">
+              コンセント・USB-A・USB-C を全席に標準装備。スマホもノートPCも、バッテリーを気にせず集中できる。
+              「充電が切れた」は、もう言い訳にならない。
+            </p>
+          </div>
+        </div>
+
+        <!-- 05: アプリ（テキストのみカード） -->
+        <div class="zigzag-row fade-in">
+          <div class="zigzag-img ratio-16-9" style="background: var(--bg-card); display:flex; align-items:center; justify-content:center;">
+            <img src="" alt="" style="display:none;">
+            <!-- アプリUIのモックイメージ -->
+            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:2rem;">
+              <div style="font-size:4rem; text-shadow: 0 0 24px var(--neon);">📱</div>
+              <div style="font-size:0.8rem; color:var(--text-muted); text-align:center; line-height:1.8;">
+                <span style="color:var(--neon); font-weight:900; font-size:1.2rem; display:block; margin-bottom:0.5rem;">FOCUSBOX App</span>
+                空き状況をリアルタイム確認<br>
+                QR入室 / 延長 / 決済<br>
+                すべてアプリで完結
+              </div>
+            </div>
+          </div>
+          <div class="zigzag-text">
+            <span class="zigzag-tag">App</span>
+            <h3 class="zigzag-title">アプリで空き状況を<br>リアルタイム確認</h3>
+            <p class="zigzag-desc">
+              「行ったら満席だった」は過去の話。アプリを開けば近くのFOCUSBOXの空きが即わかる。
+              予約・支払い・入退室まで、スマホひとつで完結。
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /zigzag -->
+    </div>
+  </section>
+
+  <!-- ===================== FOCUS ENVIRONMENT ===================== -->
+  <section id="focus-env">
+    <div class="container">
+      <p class="section-label fade-in">Focus Environment</p>
+      <h2 class="section-title fade-in">25分、全力で。<br>5分、息をして。</h2>
+      <p class="section-desc fade-in">
+        FOCUSBOXはポモドーロ・テクニックとの相性が抜群。
+        タイマーが刻む25分が、あなたの集中力を最大化する。
+      </p>
+
+      <div class="focus-env-inner">
+        <div class="focus-env-visual fade-in">
+          <div class="focus-env-img">
+            <img src="images/03_pomodoro_timer.jpg" alt="25:00を示すデジタルポモドーロタイマー" loading="lazy">
+          </div>
+          <div class="timer-badge">
+            <span class="timer-badge-time" id="pomo-timer">25:00</span>
+            <div class="timer-badge-label">
+              <strong>集中セッション中</strong>
+              ポモドーロ #1
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-env-text fade-in fade-in-delay-1">
+          <h3 style="font-size:1.2rem; font-weight:900;">ポモドーロ・テクニックとは</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.8;">
+            1980年代に開発された時間管理術。「短い集中×短い休憩」を繰り返すことで、
+            脳の疲労を最小化しながら生産性を最大化できる。
+          </p>
+
+          <div class="pomodoro-steps fade-in fade-in-delay-2">
+            <div class="pomodoro-step">
+              <span class="pomo-dot work"></span>
+              <div class="pomo-text">
+                <strong>🔵 25分 ── 集中タイム</strong>
+                <span>スマホは裏返し。タスクひとつに全集中。ブース内は完全無音。</span>
+              </div>
+            </div>
+            <div class="pomodoro-step">
+              <span class="pomo-dot break"></span>
+              <div class="pomo-text">
+                <strong>🟣 5分 ── ショートブレイク</strong>
+                <span>ストレッチ、深呼吸。隣の自販機でエナジーを補給してもいい。</span>
+              </div>
+            </div>
+            <div class="pomodoro-step">
+              <span class="pomo-dot long"></span>
+              <div class="pomo-text">
+                <strong>🟢 4セット後 ── ロングブレイク（15〜30分）</strong>
+                <span>脳をリセット。次の4セットに向けて充電完了。</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.8rem; color:var(--text-muted); border-left:2px solid var(--neon); padding-left:0.75rem; line-height:1.7;">
+            3時間 = ポモドーロ 約6セット分。テスト範囲を一気に終わらせるには、ちょうどいい時間。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRICING ===================== -->
+  <section id="pricing">
+    <div class="container">
+      <p class="section-label fade-in">Pricing</p>
+      <h2 class="section-title fade-in">シンプルな料金。<br>余計なことは考えなくていい。</h2>
+
+      <div class="pricing-layout">
+        <div class="pricing-card fade-in">
+          <span class="pricing-badge">スタンダードプラン</span>
+          <p class="pricing-plan">1ブース</p>
+          <div class="pricing-price">¥1,500<span class="pricing-unit"> / 3時間</span></div>
+          <p class="pricing-note">超過30分ごとに＋¥300</p>
+          <ul class="pricing-features">
+            <li><span class="check">✦</span> 完全防音個室ブース</li>
+            <li><span class="check">✦</span> Bluetoothスピーカー使い放題</li>
+            <li><span class="check">✦</span> 電源・USB-A/C 充電ポート</li>
+            <li><span class="check">✦</span> 高速Wi-Fi</li>
+            <li><span class="check">✦</span> アプリで施錠・入退室管理</li>
+          </ul>
+          <a href="#cta" class="btn-primary" style="display:block; width:100%; text-align:center;">今すぐ予約する</a>
+          <p class="pricing-extra">アプリから事前決済。当日の手続き不要。</p>
+        </div>
+
+        <div class="pricing-visual fade-in fade-in-delay-1">
+          <div class="pricing-img-main">
+            <img src="images/05_soundproof_booth.jpg" alt="FOCUSBOXの防音個室ブース内部" loading="lazy">
+          </div>
+          <div class="pricing-img-caption">
+            <strong>完全防音・ネオン個室ブース</strong>
+            吸音材 × ネオンアンビエントで設計された集中空間。扉を閉めた瞬間、あなたの世界が始まる。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW TO USE ===================== -->
+  <section id="howto">
+    <div class="container">
+      <p class="section-label fade-in">How to use</p>
+      <h2 class="section-title fade-in">3ステップで、すぐ集中。</h2>
+      <p class="section-desc fade-in">面倒な手続きはゼロ。アプリひとつで完結する。</p>
+
+      <div class="steps">
+        <div class="step fade-in fade-in-delay-1">
+          <div class="step-num">01</div>
+          <h3 class="step-title">アプリで予約</h3>
+          <p class="step-desc">近くのFOCUSBOXを検索。空きブースをタップして即予約。支払いもアプリ完結。</p>
+        </div>
+        <div class="step fade-in fade-in-delay-2">
+          <div class="step-num">02</div>
+          <h3 class="step-title">QRコードで入室</h3>
+          <p class="step-desc">スマホのQRをかざすだけ。スタッフ不要・無人で24時間いつでも入れる。</p>
+        </div>
+        <div class="step fade-in fade-in-delay-3">
+          <div class="step-num">03</div>
+          <h3 class="step-title">あとは集中するだけ</h3>
+          <div class="step-img">
+            <img src="images/04_headphone_work.jpg" alt="ヘッドホンで集中作業する人" loading="lazy">
+          </div>
+          <p class="step-desc">Bluetoothに繋いで、扉を閉めて。ここからは自分だけの時間。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section id="cta">
+    <div class="container">
+      <p class="section-label fade-in">Download App</p>
+      <h2 class="cta-title fade-in">さあ、没頭しよう。</h2>
+      <p class="cta-sub fade-in">アプリをダウンロードして、今すぐ最寄りのFOCUSBOXを見つけよう。</p>
+
+      <div class="btn-group fade-in fade-in-delay-1">
+        <a href="#" class="btn-primary">無料アプリをDL</a>
+        <a href="#features" class="btn-secondary">詳細を見る</a>
+      </div>
+
+      <div class="store-badges fade-in fade-in-delay-2">
+        <a href="#" class="store-badge">
+          <span class="store-badge-icon">🍎</span>
+          <span class="store-badge-text">
+            <span>Download on the</span>
+            <strong>App Store</strong>
+          </span>
+        </a>
+        <a href="#" class="store-badge">
+          <span class="store-badge-icon">▶</span>
+          <span class="store-badge-text">
+            <span>Get it on</span>
+            <strong>Google Play</strong>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 FOCUSBOX Inc. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ===== Scroll fade-in =====
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Hero immediate
+    document.querySelectorAll('#hero .fade-in').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), 100 + i * 80);
+    });
+
+    // ===== Nav on scroll =====
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 40
+        ? 'rgba(5, 8, 16, 0.97)'
+        : 'rgba(5, 8, 16, 0.85)';
+    }, { passive: true });
+
+    // ===== ポモドーロタイマー（デモ） =====
+    let seconds = 25 * 60;
+    const timerEl = document.getElementById('pomo-timer');
+    setInterval(() => {
+      seconds--;
+      if (seconds < 0) seconds = 25 * 60;
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      timerEl.textContent = `${m}:${s}`;
+    }, 1000);
+  </script>
+</body>
+</html>
